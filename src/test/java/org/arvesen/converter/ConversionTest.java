@@ -23,4 +23,25 @@ public class ConversionTest extends TestCase {
 
 	}
 
+	
+	public void testLatitudeLongitudeToUMT32XYConversion() {
+		Conversion conversion = new Conversion();
+		double longitude = 10.8426554183903;
+		double latitude = 59.91879220651894;
+		int zone = 32;
+
+		double xy[] = conversion.LatLonToUTMXY(latitude, longitude, zone );
+		System.out.println( "X = " + xy[0] + ", Y = " + xy[1] );
+		assertNotNull( xy );
+
+		System.out.println( new Double( xy[0] ).compareTo( new Double( 603023 ) ) );
+		
+		assertTrue( new Double( xy[0] ).compareTo( new Double( 603022 ) ) == 1 );
+		assertTrue( new Double( xy[0] ).compareTo( new Double( 603023 ) ) == -1 );
+
+		assertTrue( new Double( xy[1] ).compareTo( new Double( 6643801 ) ) == 1 );
+		assertTrue( new Double( xy[1] ).compareTo( new Double( 6643802 ) ) == -1 );
+
+	}
+
 }

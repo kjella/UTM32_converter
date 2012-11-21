@@ -162,7 +162,8 @@ public class Conversion {
 	 * 
 	 * Returns: The function does not return a value.
 	 */
-	private void MapLatLonToXY( double phi, double lambda, double lambda0, double[] xy ) {
+	private double[] MapLatLonToXY( double phi, double lambda, double lambda0 ) {
+		double[] xy = new double[2];
 		double N, nu2, ep2, t, t2, l;
 		double l3coef, l4coef, l5coef, l6coef, l7coef, l8coef;
 		double tmp;
@@ -212,7 +213,7 @@ public class Conversion {
 				+ ( t / 720.0 * N * Math.pow( Math.cos( phi ), 6.0 ) * l6coef * Math.pow( l, 6.0 ) )
 				+ ( t / 40320.0 * N * Math.pow( Math.cos( phi ), 8.0 ) * l8coef * Math.pow( l, 8.0 ) );
 
-		return;
+		return xy;
 	}
 
 	/*
@@ -241,7 +242,7 @@ public class Conversion {
 	 * x1frac, x2frac, x2poly, x3poly, etc. are to enhance readability and to
 	 * optimize computations.
 	 */
-	private double[] MapXYToLatLon( double x, double y, double lambda0 ) {
+	public double[] MapXYToLatLon( double x, double y, double lambda0 ) {
 		double phif, Nf, Nfpow, nuf2, ep2, tf, tf2, tf4, cf;
 		double x1frac, x2frac, x3frac, x4frac, x5frac, x6frac, x7frac, x8frac;
 		double x2poly, x3poly, x4poly, x5poly, x6poly, x7poly, x8poly;
@@ -343,8 +344,10 @@ public class Conversion {
 	 * 
 	 * Returns: The UTM zone used for calculating the values of x and y.
 	 */
-	private double LatLonToUTMXY( double lat, double lon, int zone, double[] xy ) {
-		MapLatLonToXY( lat, lon, UTMCentralMeridian( zone ), xy );
+	public double[] LatLonToUTMXY( double lat, double lon, int zone ) {
+		lat = DegToRad (lat);
+		lon = DegToRad( lon );
+		double[] xy = MapLatLonToXY( lat, lon, UTMCentralMeridian( zone ) );
 
 		/* Adjust easting and northing for UTM system. */
 		xy[0] = xy[0] * UTMScaleFactor + 500000.0;
@@ -352,7 +355,8 @@ public class Conversion {
 		if ( xy[1] < 0.0 )
 			xy[1] = xy[1] + 10000000.0;
 
-		return zone;
+//		return zone;
+		return xy;
 	}
 
 	/*
