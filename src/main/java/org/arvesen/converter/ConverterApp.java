@@ -2,6 +2,8 @@ package org.arvesen.converter;
 
 import java.util.Random;
 
+import org.arvesen.converter.model.GeographicPoint;
+
 public class ConverterApp {
 
 	public static void main(String[] args) {
@@ -17,8 +19,8 @@ public class ConverterApp {
 			boolean southhemi = false;
 			int zone = 32;
 
-			double[] latlon = conversion.UTMXYToLatLon( x, y, zone, southhemi );
-			System.out.println( "Latitude = " + conversion.RadToDeg( latlon[0] ) + ", longitude = " + conversion.RadToDeg( latlon[1] ) );
+			GeographicPoint point = conversion.UTMXYToLatLon( x, y, zone, southhemi );
+			System.out.println( "Latitude = " + conversion.RadToDeg( point.getLatitude() ) + ", longitude = " + conversion.RadToDeg( point.getLongitude() ) );
 		}
 		
 		long stopMS = System.currentTimeMillis();

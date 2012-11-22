@@ -2,6 +2,8 @@ package org.arvesen.converter;
 
 import junit.framework.TestCase;
 
+import org.arvesen.converter.model.GeographicPoint;
+
 public class ConversionTest extends TestCase {
 
 	public void testUMT32XYToLatitudeLongitudeConversion() {
@@ -11,15 +13,16 @@ public class ConversionTest extends TestCase {
 		boolean southhemi = false;
 		int zone = 32;
 
-		double latlon[] = conversion.UTMXYToLatLon( x, y, zone, southhemi );
-		System.out.println( "Latitude = " + latlon[0] + ", longitude = " + latlon[1] );
-		assertNotNull( latlon );
+		GeographicPoint point = conversion.UTMXYToLatLon( x, y, zone, southhemi ); 
 
-		assertTrue( new Double( latlon[0] ).compareTo( new Double( 59.00 ) ) == 1 );
-		assertTrue( new Double( latlon[0] ).compareTo( new Double( 60.00 ) ) == -1 );
+		System.out.println( "Latitude = " + point.getLatitude() + ", longitude = " + point.getLongitude() );
+		assertNotNull( point );
 
-		assertTrue( new Double( latlon[1] ).compareTo( new Double( 10.00 ) ) == 1 );
-		assertTrue( new Double( latlon[1] ).compareTo( new Double( 11.00 ) ) == -1 );
+		assertTrue( new Double( point.getLatitude() ).compareTo( new Double( 59.00 ) ) == 1 );
+		assertTrue( new Double( point.getLatitude() ).compareTo( new Double( 60.00 ) ) == -1 );
+
+		assertTrue( new Double( point.getLongitude() ).compareTo( new Double( 10.00 ) ) == 1 );
+		assertTrue( new Double( point.getLongitude() ).compareTo( new Double( 11.00 ) ) == -1 );
 
 	}
 
@@ -30,17 +33,17 @@ public class ConversionTest extends TestCase {
 		double latitude = 59.91879220651894;
 		int zone = 32;
 
-		double xy[] = conversion.LatLonToUTMXY(latitude, longitude, zone );
-		System.out.println( "X = " + xy[0] + ", Y = " + xy[1] );
-		assertNotNull( xy );
+		GeographicPoint point = conversion.LatLonToUTMXY(latitude, longitude, zone );
+		System.out.println( "X = " + point.getLatitude() + ", Y = " + point.getLongitude() );
+		assertNotNull( point );
 
-		System.out.println( new Double( xy[0] ).compareTo( new Double( 603023 ) ) );
+		System.out.println( new Double( point.getLatitude() ).compareTo( new Double( 603023 ) ) );
 		
-		assertTrue( new Double( xy[0] ).compareTo( new Double( 603022 ) ) == 1 );
-		assertTrue( new Double( xy[0] ).compareTo( new Double( 603023 ) ) == -1 );
+		assertTrue( new Double( point.getLatitude() ).compareTo( new Double( 603022 ) ) == 1 );
+		assertTrue( new Double( point.getLatitude() ).compareTo( new Double( 603023 ) ) == -1 );
 
-		assertTrue( new Double( xy[1] ).compareTo( new Double( 6643801 ) ) == 1 );
-		assertTrue( new Double( xy[1] ).compareTo( new Double( 6643802 ) ) == -1 );
+		assertTrue( new Double( point.getLongitude() ).compareTo( new Double( 6643801 ) ) == 1 );
+		assertTrue( new Double( point.getLongitude() ).compareTo( new Double( 6643802 ) ) == -1 );
 
 	}
 

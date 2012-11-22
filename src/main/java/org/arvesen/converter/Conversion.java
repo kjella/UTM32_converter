@@ -1,5 +1,7 @@
 package org.arvesen.converter;
 
+import org.arvesen.converter.model.GeographicPoint;
+
 public class Conversion {
 
 	// private Math.PI = 3.14159265358979;
@@ -162,7 +164,7 @@ public class Conversion {
 	 * 
 	 * Returns: The function does not return a value.
 	 */
-	private double[] MapLatLonToXY( double phi, double lambda, double lambda0 ) {
+	private GeographicPoint MapLatLonToXY( double phi, double lambda, double lambda0 ) {
 		double[] xy = new double[2];
 		double N, nu2, ep2, t, t2, l;
 		double l3coef, l4coef, l5coef, l6coef, l7coef, l8coef;
@@ -213,7 +215,7 @@ public class Conversion {
 				+ ( t / 720.0 * N * Math.pow( Math.cos( phi ), 6.0 ) * l6coef * Math.pow( l, 6.0 ) )
 				+ ( t / 40320.0 * N * Math.pow( Math.cos( phi ), 8.0 ) * l8coef * Math.pow( l, 8.0 ) );
 
-		return xy;
+		return new GeographicPoint( xy[0], xy[1] );
 	}
 
 	/*
@@ -242,7 +244,7 @@ public class Conversion {
 	 * x1frac, x2frac, x2poly, x3poly, etc. are to enhance readability and to
 	 * optimize computations.
 	 */
-	public double[] MapXYToLatLon( double x, double y, double lambda0 ) {
+	public GeographicPoint MapXYToLatLon( double x, double y, double lambda0 ) {
 		double phif, Nf, Nfpow, nuf2, ep2, tf, tf2, tf4, cf;
 		double x1frac, x2frac, x3frac, x4frac, x5frac, x6frac, x7frac, x8frac;
 		double x2poly, x3poly, x4poly, x5poly, x6poly, x7poly, x8poly;
@@ -322,10 +324,10 @@ public class Conversion {
 		philambda[1] = lambda0 + x1frac * x + x3frac * x3poly * Math.pow( x, 3.0 ) + x5frac * x5poly
 				* Math.pow( x, 5.0 ) + x7frac * x7poly * Math.pow( x, 7.0 );
 
-		philambda[0] = this.RadToDeg(philambda[0]);
-		philambda[1] = this.RadToDeg(philambda[1]);
-		
-		return philambda;
+		philambda[0] = this.RadToDeg( philambda[0] );
+		philambda[1] = this.RadToDeg( philambda[1] );
+
+		return new GeographicPoint( philambda[0], philambda[1] );
 	}
 
 	/*
@@ -344,19 +346,21 @@ public class Conversion {
 	 * 
 	 * Returns: The UTM zone used for calculating the values of x and y.
 	 */
-	public double[] LatLonToUTMXY( double lat, double lon, int zone ) {
-		lat = DegToRad (lat);
+	public GeographicPoint LatLonToUTMXY( double lat, double lon, int zone ) {
+		double[] xy = new double[2];
+		lat = DegToRad( lat );
 		lon = DegToRad( lon );
-		double[] xy = MapLatLonToXY( lat, lon, UTMCentralMeridian( zone ) );
+		GeographicPoint point = MapLatLonToXY( lat, lon, UTMCentralMeridian( zone ) );
 
 		/* Adjust easting and northing for UTM system. */
-		xy[0] = xy[0] * UTMScaleFactor + 500000.0;
-		xy[1] = xy[1] * UTMScaleFactor;
+		point.setLatitude( point.getLatitude() * UTMScaleFactor + 500000.0 );
+		point.setLongitude( point.getLongitude() * UTMScaleFactor );
 		if ( xy[1] < 0.0 )
 			xy[1] = xy[1] + 10000000.0;
 
-//		return zone;
-		return xy;
+		// return zone;
+		return point;
+		
 	}
 
 	/*
@@ -374,7 +378,7 @@ public class Conversion {
 	 * 
 	 * Returns: The function does not return a value.
 	 */
-	public double[] UTMXYToLatLon( double x, double y, int zone, boolean isOnSouthernHemisphere ) {
+	public GeographicPoint UTMXYToLatLon( double x, double y, int zone, boolean isOnSouthernHemisphere ) {
 		double cmeridian;
 
 		x -= 500000.0;
