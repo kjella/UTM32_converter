@@ -6,7 +6,7 @@ public class Conversion {
 
 	// private Math.PI = 3.14159265358979;
 	private static double PIValue = Math.PI;
-	private static final int UTM32_ZONE = 32;
+	private static final int NOR_SOUTH_EAST_ZONE = 32;
 
 	/* Ellipsoid model constants (actual values here are for WGS84) */
 	private static double sm_a = 6378137.0;
@@ -20,7 +20,7 @@ public class Conversion {
 	 * 
 	 * Converts degrees to radians.
 	 */
-	public double DegToRad( double deg ) {
+	public static double DegToRad( double deg ) {
 		return ( deg / 180.0 * PIValue );
 	}
 
@@ -29,7 +29,7 @@ public class Conversion {
 	 * 
 	 * Converts radians to degrees.
 	 */
-	public double RadToDeg( double rad ) {
+	public static double RadToDeg( double rad ) {
 		return ( rad / PIValue * 180.0 );
 	}
 
@@ -94,7 +94,7 @@ public class Conversion {
 	private double UTMCentralMeridian( int zone ) {
 		double cmeridian;
 
-		cmeridian = DegToRad( -183.0 + ( UTM32_ZONE * 6.0 ) );
+		cmeridian = DegToRad( -183.0 + ( NOR_SOUTH_EAST_ZONE * 6.0 ) );
 
 		return cmeridian;
 	}
@@ -362,7 +362,11 @@ public class Conversion {
 		return point;
 		
 	}
-
+	
+	public GeographicPoint UTMXYToLatLon( double x, double y ) {
+		return this.UTMXYToLatLon( x, y, NOR_SOUTH_EAST_ZONE, false );
+	}
+	
 	/*
 	 * UTMXYToLatLon
 	 * 

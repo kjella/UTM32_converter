@@ -20,7 +20,7 @@ public class ConverterApp {
 			int zone = 32;
 
 			GeographicPoint point = conversion.UTMXYToLatLon( x, y, zone, southhemi );
-			System.out.println( "Latitude = " + conversion.RadToDeg( point.getLatitude() ) + ", longitude = " + conversion.RadToDeg( point.getLongitude() ) );
+			System.out.println( "Latitude = " + Conversion.RadToDeg( point.getLatitude() ) + ", longitude = " + Conversion.RadToDeg( point.getLongitude() ) );
 		}
 		
 		long stopMS = System.currentTimeMillis();
