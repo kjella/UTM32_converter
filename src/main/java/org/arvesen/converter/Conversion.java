@@ -5,15 +5,15 @@ import org.arvesen.converter.model.GeographicPoint;
 public class Conversion {
 
 	// private Math.PI = 3.14159265358979;
-	private double PIValue = Math.PI;
+	private static double PIValue = Math.PI;
 	private static final int UTM32_ZONE = 32;
 
 	/* Ellipsoid model constants (actual values here are for WGS84) */
-	private double sm_a = 6378137.0;
-	private double sm_b = 6356752.314;
-	private double sm_EccSquared = 6.69437999013e-03;
+	private static double sm_a = 6378137.0;
+	private static double sm_b = 6356752.314;
+//	private static double sm_EccSquared = 6.69437999013e-03;
 
-	private double UTMScaleFactor = 0.9996;
+	private static double UTMScaleFactor = 0.9996;
 
 	/*
 	 * DegToRad
